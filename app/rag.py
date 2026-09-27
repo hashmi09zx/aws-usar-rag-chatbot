@@ -10,10 +10,10 @@ from langchain_huggingface import HuggingFaceEmbeddings
 load_dotenv()
 PINECONE_API_KEY = os.getenv("PINECONE_API_KEY")
 GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
-INDEX_NAME = "aws-usar-index"
+INDEX_NAME = os.getenv("PINECONE_INDEX", "aws-usar-index")
 
 
-def get_rag_chain():
+def get_rag_chain(top_k: int = 3):
     # ✅ Pinecone client
     pc = Pinecone(api_key=PINECONE_API_KEY)
     index = pc.Index(INDEX_NAME)
@@ -28,11 +28,11 @@ def get_rag_chain():
         text_key="text",   # matches what you stored in ingest.py
         namespace=""
     )
-    retriever = vectorstore.as_retriever(search_kwargs={"k": 3})
+    retriever = vectorstore.as_retriever(search_kwargs={"k": top_k})
 
-    # ✅ Gemini LLM
+    # ✅ Gemini LLM (gemini-3.8-flash)
     llm = ChatGoogleGenerativeAI(
-        model="gemini-1.5-flash",
+        model=os.getenv("GEMINI_MODEL", "gemini-3.8-flash"),
         temperature=0,
         google_api_key=GOOGLE_API_KEY
     )
@@ -80,3 +80,4 @@ def format_response(result):
             "text": doc.page_content
         })
     return {"answer": answer, "sources": sources}
+

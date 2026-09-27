@@ -6,7 +6,7 @@ langchain-pinecone
 langchain-huggingface
 langchain-community
 google-genai
-pinecone-client>=6.0.0
+pinecone>=5.0.0
 sentence-transformers>=2.2.0
 numpy
 tqdm
