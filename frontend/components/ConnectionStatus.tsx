@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { ConnectionStatusType } from '@/types/chat';
+import { getApiBaseUrl } from '@/lib/api';
 import { RefreshCw, Wifi, WifiOff } from 'lucide-react';
 
 interface ConnectionStatusProps {
@@ -20,7 +21,7 @@ export const ConnectionStatus: React.FC<ConnectionStatusProps> = ({ status, onRe
             ? 'bg-rose-50 border-rose-200/80 text-rose-700'
             : 'bg-amber-50 border-amber-200/80 text-amber-700'
         }`}
-        title={`FastAPI Backend at ${process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000'}`}
+        title={`FastAPI Backend at ${getApiBaseUrl()}`}
       >
         <span className="relative flex h-2 w-2">
           {status === 'connected' && (

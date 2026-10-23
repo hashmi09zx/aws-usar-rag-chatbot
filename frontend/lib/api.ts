@@ -1,10 +1,19 @@
 import { ChatResponse } from '@/types/chat';
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000';
+export function getApiBaseUrl(): string {
+  if (process.env.NEXT_PUBLIC_API_URL) {
+    return process.env.NEXT_PUBLIC_API_URL.replace(/\/$/, '');
+  }
+  if (typeof window !== 'undefined' && window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') {
+    return 'https://aws-usar-rag-chatbot-backend.onrender.com';
+  }
+  return 'http://127.0.0.1:8000';
+}
 
 export async function checkHealth(): Promise<boolean> {
+  const baseUrl = getApiBaseUrl();
   try {
-    const res = await fetch(`${API_BASE_URL}/`, {
+    const res = await fetch(`${baseUrl}/`, {
       method: 'GET',
       headers: {
         'Accept': 'application/json',
@@ -21,7 +30,8 @@ export async function checkHealth(): Promise<boolean> {
 }
 
 export async function sendMessage(question: string, top_k: number = 3): Promise<ChatResponse> {
-  const res = await fetch(`${API_BASE_URL}/chat`, {
+  const baseUrl = getApiBaseUrl();
+  const res = await fetch(`${baseUrl}/chat`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

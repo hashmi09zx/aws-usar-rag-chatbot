@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { Message, Source } from '@/types/chat';
+import { getApiBaseUrl } from '@/lib/api';
 import { Sparkles, User, Copy, Check, BookOpen, AlertCircle, RotateCcw } from 'lucide-react';
 
 interface ChatMessageProps {
@@ -59,7 +60,7 @@ export const ChatMessage: React.FC<ChatMessageProps> = ({
                   <p className="font-semibold">Unable to reach the knowledge assistant.</p>
                   <p className="text-slate-600 text-xs">{message.content}</p>
                   <p className="text-[11px] text-slate-500 mt-1">
-                    Please make sure the FastAPI server is running on <code className="bg-rose-100/60 px-1 py-0.5 rounded font-mono text-rose-800">http://127.0.0.1:8000</code>.
+                    Please make sure the backend server is reachable at <code className="bg-rose-100/60 px-1 py-0.5 rounded font-mono text-rose-800">{getApiBaseUrl()}</code>.
                   </p>
                 </div>
               </div>
